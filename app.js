@@ -41,20 +41,24 @@ for(i=0;i<24;i++) {
   betaData.push(betaDataRow);
 }
 
-console.log(betaData);
+// Verify correct structure of betaData using the above nested for loops
+// console.log(betaData);
 
-// topographical surface plot with projected contours
-Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows) {
-  function unpack(rows, key) {
-    return rows.map(function(row) {
-      return row[key];
-    });
-  }
+// topographical surface plot with projected contours from the tutorial
+// Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows) {
+  // function unpack(rows, key) {
+  //   return rows.map(function(row) {
+  //     return row[key];
+  //   });
+  // }
 
-  let z_data = [];
-  for(i=0;i<24;i++) {
-    z_data.push(unpack(rows,i));
-  }
+Plotly.d3.csv('', function(err, rows) {
+
+// CSV unpacking function to generate a nested array structure for z-data reference
+//   let z_data = [];
+//   for(i=0;i<24;i++) {
+//     z_data.push(unpack(rows,i));
+//   }
 
   // Verify structure of z_data to substitute betaData
   // console.log(z_data)
