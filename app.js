@@ -31,6 +31,18 @@ const topographicalSurfacePlotWithContours = document.querySelector('#topographi
 //   Plotly.newPlot(topographicalSurfacePlot, data, layout);
 // })
 
+// test data
+const betaData = [];
+for(i=0;i<24;i++) {
+  const betaDataRow = [];
+  for(j=0;j<24;j++) {
+    betaDataRow.push(Math.random() * 250)
+  }
+  betaData.push(betaDataRow);
+}
+
+console.log(betaData);
+
 // topographical surface plot with projected contours
 Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows) {
   function unpack(rows, key) {
@@ -44,8 +56,13 @@ Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs
     z_data.push(unpack(rows,i));
   }
 
+  // Verify structure of z_data to substitute betaData
+  // console.log(z_data)
+
   let data = [{
-    z: z_data,
+    // Replace z_data with betaData and test the resulting plot
+    // z: z_data,
+    z: betaData,
     type: 'surface',
     contours: {
       z: {
@@ -59,6 +76,8 @@ Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs
     }
   }];
 
+  console.log(data)
+
   let layout = {
     title: 'Mt Bruno Elevation With Projected Contours',
     scene: {
@@ -71,6 +90,8 @@ Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs
       }
     },
     autosize: false,
+    width: 1000,
+    height: 750,
     margin: {
       l: 65,
       r: 50,
