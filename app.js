@@ -31,7 +31,7 @@ const topographicalSurfacePlotWithContours = document.querySelector('#topographi
 //   Plotly.newPlot(topographicalSurfacePlot, data, layout);
 // })
 
-
+console.log(Math.cos(convertDegreestoRadians(30)));
 
 // Test run with algorithm
 // let orbitalOffset = 0;
@@ -53,18 +53,32 @@ function compoundSolarYield(orbitalOffset, orbitalPosition) {
 
 function populateSolarYieldArray() {
   const finalCosineYield = [];
-  for(let i = 0; i < 91; i++) {
+  for(let i = -90; i < 91; i++) {
     const finalCosineYieldRow = [];
-    for(let j = 0; j < 91; j++) {
+    for(let j = 0; j < 181; j++) {
       finalCosineYieldRow.push(compoundSolarYield(i, j));
     }
     finalCosineYield.push(finalCosineYieldRow);
   }
-  console.log(finalCosineYield);
   return finalCosineYield;
 }
 
+// Test run of populateSolarYieldArray
 // populateSolarYieldArray();
+
+// Populate two hard deck references for production
+const zPositiveHardDeck = [];
+// const zNegativeHardDeck = [];
+function generatePositiveHardDeck() {
+  for(let i = 0; i < 181; i++) {
+    const hardDeckRow = [];
+    for(let j = 0; j < 181; j++) {
+      hardDeckRow.push(Math.cos(convertDegreestoRadians(30)));
+    }
+    zPositiveHardDeck.push(hardDeckRow);
+  }
+  return zPositiveHardDeck;
+}
 
 // test data
 const betaData = [];
@@ -98,27 +112,36 @@ Plotly.d3.csv('', function(err, rows) {
   // Verify structure of z_data to substitute betaData
   // console.log(z_data)
 
-  let data = [{
+  let productionYieldData = [{
     // Replace z_data with betaData and test the resulting plot
     // z: z_data,
     z: populateSolarYieldArray(),
+    showscale: false,
+    opacity: 0.9,
     type: 'surface',
-    contours: {
-      z: {
-        show: true,
-        usecolormap: true,
-        highlightcolor: "#42f462",
-        project: {
-          z: true
-        }
-      }
-    }
+    // contours: {
+    //   z: {
+    //     show: true,
+    //     usecolormap: true,
+    //     highlightcolor: "#42f462",
+    //     project: {
+    //       z: true
+    //     }
+    //   }
+    // }
   }];
 
-  console.log(data)
+  let positiveHardDeck = {
+      z: generatePositiveHardDeck(),
+      showscale: false,
+      opacity: 0.9,
+      type: 'surface'
+    };
+
+  console.log(productionYieldData)
 
   let layout = {
-    title: 'Mt Bruno Elevation With Projected Contours',
+    title: 'Percent Solar Yield With Projected Contours',
     scene: {
       camera: {
         eye: {
@@ -139,7 +162,11 @@ Plotly.d3.csv('', function(err, rows) {
     }
   };
 
-  Plotly.newPlot(topographicalSurfacePlotWithContours, data, layout)
+  // Original plot to produce a single surface
+  Plotly.newPlot(topographicalSurfacePlotWithContours, productionYieldData, layout)
+
+  // Modified multiple surface plot
+  // Plotly.newPlot(topographicalSurfacePlotWithContours, [productionYieldData, positiveHardDeck])
 })
 
 // multiple 3D surface plots
