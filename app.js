@@ -31,6 +31,41 @@ const topographicalSurfacePlotWithContours = document.querySelector('#topographi
 //   Plotly.newPlot(topographicalSurfacePlot, data, layout);
 // })
 
+
+
+// Test run with algorithm
+// let orbitalOffset = 0;
+// let orbitalPosition = 0;
+let xAxisAngularRotation = 0;
+let zAxisAngularRotation = 0;
+
+// Dedicated function to convert angle measurements from degrees to radians
+function convertDegreestoRadians(angleInDegrees) {
+  return Math.PI * angleInDegrees / 180;
+}
+
+// Compounded solar yield calculation
+function compoundSolarYield(orbitalOffset, orbitalPosition) {
+  const orbitalOffsetValue = Math.cos(convertDegreestoRadians(orbitalOffset - zAxisAngularRotation));
+  const orbitalPositionValue = Math.cos(convertDegreestoRadians(orbitalPosition - xAxisAngularRotation));
+  return orbitalOffsetValue * orbitalPositionValue;
+}
+
+function populateSolarYieldArray() {
+  const finalCosineYield = [];
+  for(let i = 0; i < 91; i++) {
+    const finalCosineYieldRow = [];
+    for(let j = 0; j < 91; j++) {
+      finalCosineYieldRow.push(compoundSolarYield(i, j));
+    }
+    finalCosineYield.push(finalCosineYieldRow);
+  }
+  console.log(finalCosineYield);
+  return finalCosineYield;
+}
+
+// populateSolarYieldArray();
+
 // test data
 const betaData = [];
 for(i=0;i<24;i++) {
@@ -66,7 +101,7 @@ Plotly.d3.csv('', function(err, rows) {
   let data = [{
     // Replace z_data with betaData and test the resulting plot
     // z: z_data,
-    z: betaData,
+    z: populateSolarYieldArray(),
     type: 'surface',
     contours: {
       z: {
