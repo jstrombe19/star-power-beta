@@ -1,35 +1,6 @@
 // const topographicalSurfacePlot = document.querySelector('#topographical-plot');
 const topographicalSurfacePlotWithContours = document.querySelector('#topographical-plot-with-contours');
-// const multipleTopographicalPlots = document.querySelector('#multiple-topographical-plots');
-
-// topographical surface plot
-// Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err,rows) {
-//   function unpack(rows, key) {
-//     return rows.map(function(row) { return row[key]; });
-//   }
-
-//   let z_data = [];
-//   for(i=0;i<24;i++) {
-//     z_data.push(unpack(rows, i));
-//   }
-
-//   let data = [{
-//     z: z_data,
-//     type: 'surface'
-//   }];
-
-//   let layout = {
-//     title: 'Mt Bruno Elevation',
-//     autosize: false,
-//     margin: {
-//       l: 65,
-//       r: 50,
-//       b: 65,
-//       t: 90,
-//     }
-//   };
-//   Plotly.newPlot(topographicalSurfacePlot, data, layout);
-// })
+const multipleTopographicalPlots = document.querySelector('#multiple-topographical-plots');
 
 console.log(Math.cos(convertDegreestoRadians(30)));
 
@@ -47,7 +18,7 @@ function convertDegreestoRadians(angleInDegrees) {
 // Compounded solar yield calculation
 function compoundSolarYield(orbitalOffset, orbitalPosition) {
   const orbitalOffsetValue = Math.cos(convertDegreestoRadians(orbitalOffset - zAxisAngularRotation));
-  const orbitalPositionValue = Math.cos(convertDegreestoRadians(orbitalPosition - xAxisAngularRotation));
+  const orbitalPositionValue = Math.cos(90 - convertDegreestoRadians(orbitalPosition - xAxisAngularRotation));
   return orbitalOffsetValue * orbitalPositionValue;
 }
 
@@ -116,32 +87,47 @@ Plotly.d3.csv('', function(err, rows) {
     // Replace z_data with betaData and test the resulting plot
     // z: z_data,
     z: populateSolarYieldArray(),
-    showscale: false,
-    opacity: 0.9,
+    showscale: true,
+    opacity: 1.0,
     type: 'surface',
-    // contours: {
-    //   z: {
-    //     show: true,
-    //     usecolormap: true,
-    //     highlightcolor: "#42f462",
-    //     project: {
-    //       z: true
-    //     }
-    //   }
-    // }
+    contours: {
+      z: {
+        show: true,
+        usecolormap: true,
+        highlightcolor: "#42f462",
+        project: {
+          z: true
+        }
+      }
+    }
   }];
-
-  let positiveHardDeck = {
-      z: generatePositiveHardDeck(),
-      showscale: false,
-      opacity: 0.9,
-      type: 'surface'
-    };
-
-  console.log(productionYieldData)
 
   let layout = {
     title: 'Percent Solar Yield With Projected Contours',
+    xaxis: {
+      title: 'Orbital Position',
+      titlefont: {
+        family: 'Arial, sans-seriff',
+        size: 18,
+        color: 'black'
+      },
+    },
+    yaxis: {
+      title: 'Orbital Offset',
+      titlefont: {
+        family: 'Arial, sans-seriff',
+        size: 18,
+        color: 'black'
+      }
+    },
+    zaxis: {
+      title: 'Percent Solar Yield',
+      titlefont: {
+        family: 'Arial, sans-seriff',
+        size: 18,
+        color: 'black'
+      }
+    },
     scene: {
       camera: {
         eye: {
@@ -168,6 +154,79 @@ Plotly.d3.csv('', function(err, rows) {
   // Modified multiple surface plot
   // Plotly.newPlot(topographicalSurfacePlotWithContours, [productionYieldData, positiveHardDeck])
 })
+
+// multiple 3D surface plots
+z1 = populateSolarYieldArray();
+
+z2 = [];
+for (let i = 0; i < z1.length; i++) {
+  z2_row = [];
+  for (let j = 0; j < z1[i].length; j++) {
+    z2_row.push(Math.cos(convertDegreestoRadians(30)));
+  }
+  z2.push(z2_row);
+}
+
+z3 = [];
+for (let i = 0; i < z1.length; i++) {
+  z3_row = [];
+  for (let j = 0; j < z1[i].length; j++) {
+    z3_row.push(-Math.cos(convertDegreestoRadians(30)));
+  }
+  z3.push(z3_row);
+}
+
+let data_z1 = {
+  z: z1, 
+  type: 'surface'
+};
+
+let data_z2 = {
+  z: z2,
+  showscale: false,
+  opacity: 0.9,
+  type: 'surface'
+};
+
+let data_z3 = {
+  z: z3,
+  showscale: false,
+  opacity: 0.9,
+  type: 'surface'
+};
+
+Plotly.newPlot(multipleTopographicalPlots, [data_z1, data_z2, data_z3]);
+
+
+
+// topographical surface plot
+// Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err,rows) {
+//   function unpack(rows, key) {
+//     return rows.map(function(row) { return row[key]; });
+//   }
+
+//   let z_data = [];
+//   for(i=0;i<24;i++) {
+//     z_data.push(unpack(rows, i));
+//   }
+
+//   let data = [{
+//     z: z_data,
+//     type: 'surface'
+//   }];
+
+//   let layout = {
+//     title: 'Mt Bruno Elevation',
+//     autosize: false,
+//     margin: {
+//       l: 65,
+//       r: 50,
+//       b: 65,
+//       t: 90,
+//     }
+//   };
+//   Plotly.newPlot(topographicalSurfacePlot, data, layout);
+// })
 
 // multiple 3D surface plots
 // z1 = [
