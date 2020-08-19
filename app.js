@@ -18,15 +18,15 @@ function convertDegreestoRadians(angleInDegrees) {
 // Compounded solar yield calculation
 function compoundSolarYield(orbitalOffset, orbitalPosition) {
   const orbitalOffsetValue = Math.cos(convertDegreestoRadians(orbitalOffset - zAxisAngularRotation));
-  const orbitalPositionValue = Math.cos(90 - convertDegreestoRadians(orbitalPosition - xAxisAngularRotation));
+  const orbitalPositionValue = Math.cos(convertDegreestoRadians(orbitalPosition - xAxisAngularRotation));
   return orbitalOffsetValue * orbitalPositionValue;
 }
 
 function populateSolarYieldArray() {
   const finalCosineYield = [];
-  for(let i = -90; i < 91; i++) {
+  for(let i = 0; i < 91; i++) {
     const finalCosineYieldRow = [];
-    for(let j = 0; j < 181; j++) {
+    for(let j = -90; j < 91; j++) {
       finalCosineYieldRow.push(compoundSolarYield(i, j));
     }
     finalCosineYield.push(finalCosineYieldRow);
