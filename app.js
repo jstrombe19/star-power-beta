@@ -22,6 +22,7 @@ function compoundSolarYield(orbitalOffset, orbitalPosition) {
   return orbitalOffsetValue * orbitalPositionValue;
 }
 
+
 function populateSolarYieldArray() {
   const finalCosineYield = [];
   for(let i = 0; i < 91; i++) {
